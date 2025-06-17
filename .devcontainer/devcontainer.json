@@ -10,7 +10,8 @@
             "version": "none",
             "installMaven": "true",
             "installGradle": "true",
-            "gradleVersion": "8.13"
+            "gradleVersion": "8.13",
+            "sdkmanVersion": "5.1.13"
         },
         "ghcr.io/devcontainers/features/node:1": {},
         "ghcr.io/nordcominc/devcontainer-features/android-sdk:1": {
@@ -20,6 +21,7 @@
     "containerEnv": {
         "ANDROID_NDK_HOME": "/usr/local/android-ndk" // Match the NDK install path
     },
+    "initializeCommand": "bash -c 'apt-get update && apt-get install -y curl wget tar gzip && if [ -d \"./scripts\" ]; then chmod +x ./scripts/*; fi'",
     "postCreateCommand": "ls -la /usr/local/android-ndk && echo $ANDROID_NDK_HOME"
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
