@@ -37,7 +37,7 @@ RUN yes | sdkmanager --licenses && \
 
 RUN npm i -g eas-cli
 WORKDIR /workspaces/devcontainer
-RUN npm i
+RUN ls
 
 # 验证Java和Gradle安装
 RUN java -version && gradle --version
