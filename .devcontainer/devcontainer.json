@@ -3,7 +3,9 @@
 {
     "name": "Java",
     // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-    "image": "Dockerfile"
+    "build": {
+        "dockerfile": "Dockerfile"
+    }
     // "containerEnv": {
     //     "ANDROID_NDK_HOME": "/usr/local/android-ndk" // Match the NDK install path
     // },
