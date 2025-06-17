@@ -4,6 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
+ENV ANDROID_HOME=$ANDROID_SDK_ROOT
 ENV ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.1.12297006
 ENV PATH=$PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_NDK_HOME
 ENV NODE_ENV=production
@@ -15,8 +16,8 @@ RUN apk update && apk add --no-cache \
 RUN npm install -g npm@latest pnpm
 
 # 环境变量
-ENV GRADLE_VERSION=8.13 \
-    GRADLE_HOME=/opt/gradle
+# ENV GRADLE_VERSION=8.13 \
+#     GRADLE_HOME=/opt/gradle
 
 # 安装依赖
 RUN apk add --no-cache openjdk17 curl unzip bash
