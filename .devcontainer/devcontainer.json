@@ -6,6 +6,5 @@
     "build": {
         "dockerfile": "Dockerfile"
     },
-    "remoteUser": "root",
-    "initializeCommand": "npm i"
+    "remoteUser": "root"
 }
