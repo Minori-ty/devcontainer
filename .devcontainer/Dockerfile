@@ -36,7 +36,6 @@ RUN yes | sdkmanager --licenses && \
     "ndk;27.1.12297006"
 
 RUN npm i -g eas-cli
-RUN npm i
 
 # 验证Java和Gradle安装
 RUN java -version && gradle --version
