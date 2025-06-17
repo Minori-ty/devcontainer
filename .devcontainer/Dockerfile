@@ -21,10 +21,11 @@ ENV GRADLE_VERSION=8.13 \
 # 安装依赖
 RUN apk add --no-cache openjdk17 curl unzip bash
 
-# 安装 Gradle 本体
-RUN curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
-    unzip -q gradle.zip -d /opt && \
-    mv /opt/gradle-${GRADLE_VERSION} ${GRADLE_HOME} && \
+# 安装 Gradle 8.13
+RUN curl -fsSL https://services.gradle.org/distributions/gradle-8.13-bin.zip -o gradle.zip && \
+    unzip gradle.zip -d /opt && \
+    ln -s /opt/gradle-8.13 /opt/gradle && \
+    ln -s /opt/gradle/bin/gradle /usr/bin/gradle && \
     rm gradle.zip
 
 WORKDIR /app
