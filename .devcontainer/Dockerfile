@@ -14,12 +14,31 @@ RUN apk update && apk add --no-cache \
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
 
-# 安装 Gradle 8.13
-RUN curl -fsSL https://services.gradle.org/distributions/gradle-8.13-bin.zip -o gradle.zip && \
-    unzip gradle.zip -d /opt && \
-    ln -s /opt/gradle-8.13 /opt/gradle && \
-    ln -s /opt/gradle/bin/gradle /usr/bin/gradle && \
-    rm gradle.zip
+# 设置环境变量
+ENV GRADLE_VERSION=8.13 \
+    GRADLE_HOME=/opt/gradle \
+    GRADLE_USER_HOME=/opt/gradle-home
+
+# 创建 Gradle 安装目录
+RUN mkdir -p ${GRADLE_HOME} ${GRADLE_USER_HOME}
+
+# 下载并解压 Gradle 8.13 到 GRADLE_HOME
+RUN curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
+    && unzip -q gradle.zip -d /opt \
+    && mv /opt/gradle-${GRADLE_VERSION}/* ${GRADLE_HOME}/ \
+    && rm -rf /opt/gradle-${GRADLE_VERSION} gradle.zip
+
+# 添加 gradle 到 PATH
+ENV PATH="${GRADLE_HOME}/bin:${PATH}"
+
+# 设置工作目录
+WORKDIR /app
+
+# 初始化 Gradle Wrapper（可选：复制已有项目）
+RUN gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type bin
+
+# 给 gradlew 脚本添加执行权限
+RUN chmod +x gradlew
 
 # 安装 Android SDK 和 NDK
 RUN mkdir -p $ANDROID_SDK_ROOT && cd $ANDROID_SDK_ROOT && \
@@ -36,8 +55,3 @@ RUN yes | sdkmanager --licenses && \
     "ndk;27.1.12297006"
 
 RUN npm i -g eas-cli
-WORKDIR /workspaces/devcontainer
-RUN ls
-
-# 验证Java和Gradle安装
-RUN java -version && gradle --version
