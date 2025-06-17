@@ -21,24 +21,19 @@ ENV GRADLE_VERSION=8.13 \
 # 安装依赖
 RUN apk add --no-cache openjdk17 curl unzip bash
 
-# 解压 gradle 到 GRADLE_HOME（提前安装）
-RUN curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
+# 预下载 gradle 二进制包（可选，放入容器，或者直接使用 wrapper）
+RUN mkdir -p ${GRADLE_HOME} && \
+    curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
     unzip -q gradle.zip -d /opt && \
-    mv /opt/gradle-${GRADLE_VERSION} /opt/gradle && \
+    mv /opt/gradle-${GRADLE_VERSION}/* ${GRADLE_HOME}/ && \
     rm gradle.zip
 
-ENV PATH="/opt/gradle/bin:$PATH"
-
-# 设置工作目录
 WORKDIR /app
 
-# 手动构建 gradle wrapper 结构
-RUN mkdir -p gradle/wrapper && \
-    curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle/wrapper/gradle-${GRADLE_VERSION}-bin.zip && \
-    echo "distributionUrl=https\\://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" > gradle/wrapper/gradle-wrapper.properties && \
-    curl -fsSL https://raw.githubusercontent.com/gradle/gradle/release/gradle-wrapper/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar && \
-    curl -fsSL https://raw.githubusercontent.com/gradle/gradle/release/gradle-wrapper/gradlew -o gradlew && \
-    chmod +x gradlew
+# 初始化 gradle 项目并生成 wrapper
+RUN gradle init --type basic --project-name temp-project && \
+    gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type bin && \
+    rm -rf build src *.gradle settings.gradle
 
 # 安装 Android SDK 和 NDK
 RUN mkdir -p $ANDROID_SDK_ROOT && cd $ANDROID_SDK_ROOT && \
