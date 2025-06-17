@@ -14,31 +14,32 @@ RUN apk update && apk add --no-cache \
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
 
-# 设置环境变量
+# 环境变量
 ENV GRADLE_VERSION=8.13 \
-    GRADLE_HOME=/opt/gradle \
-    GRADLE_USER_HOME=/opt/gradle-home
+    GRADLE_HOME=/opt/gradle
 
-# 创建 Gradle 安装目录
-RUN mkdir -p ${GRADLE_HOME} ${GRADLE_USER_HOME}
+# 安装依赖
+RUN apk add --no-cache openjdk17 curl unzip bash
 
-# 下载并解压 Gradle 8.13 到 GRADLE_HOME
-RUN curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip \
-    && unzip -q gradle.zip -d /opt \
-    && mv /opt/gradle-${GRADLE_VERSION}/* ${GRADLE_HOME}/ \
-    && rm -rf /opt/gradle-${GRADLE_VERSION} gradle.zip
+# 解压 gradle 到 GRADLE_HOME（提前安装）
+RUN mkdir -p ${GRADLE_HOME} && \
+    curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
+    unzip -q gradle.zip -d /opt && \
+    mv /opt/gradle-${GRADLE_VERSION}/* ${GRADLE_HOME}/ && \
+    rm -rf /opt/gradle-${GRADLE_VERSION} gradle.zip
 
-# 添加 gradle 到 PATH
 ENV PATH="${GRADLE_HOME}/bin:${PATH}"
 
 # 设置工作目录
 WORKDIR /app
 
-# 初始化 Gradle Wrapper（可选：复制已有项目）
-RUN gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type bin
-
-# 给 gradlew 脚本添加执行权限
-RUN chmod +x gradlew
+# 手动构建 gradle wrapper 结构
+RUN mkdir -p gradle/wrapper && \
+    curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle/wrapper/gradle-${GRADLE_VERSION}-bin.zip && \
+    echo "distributionUrl=https\\://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip" > gradle/wrapper/gradle-wrapper.properties && \
+    curl -fsSL https://raw.githubusercontent.com/gradle/gradle/v${GRADLE_VERSION}/gradle/wrapper/gradle-wrapper.jar -o gradle/wrapper/gradle-wrapper.jar && \
+    curl -fsSL https://raw.githubusercontent.com/gradle/gradle/v${GRADLE_VERSION}/gradlew -o gradlew && \
+    chmod +x gradlew
 
 # 安装 Android SDK 和 NDK
 RUN mkdir -p $ANDROID_SDK_ROOT && cd $ANDROID_SDK_ROOT && \
