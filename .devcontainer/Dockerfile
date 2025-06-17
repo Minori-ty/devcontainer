@@ -21,16 +21,15 @@ ENV GRADLE_VERSION=8.13 \
 # 安装依赖
 RUN apk add --no-cache openjdk17 curl unzip bash
 
-# 预下载 gradle 二进制包（可选，放入容器，或者直接使用 wrapper）
-RUN mkdir -p ${GRADLE_HOME} && \
-    curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
+# 安装 Gradle 本体
+RUN curl -fsSL https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -o gradle.zip && \
     unzip -q gradle.zip -d /opt && \
-    mv /opt/gradle-${GRADLE_VERSION}/* ${GRADLE_HOME}/ && \
+    mv /opt/gradle-${GRADLE_VERSION} ${GRADLE_HOME} && \
     rm gradle.zip
 
 WORKDIR /app
 
-# 初始化 gradle 项目并生成 wrapper
+# 用系统安装的 Gradle 创建 wrapper
 RUN gradle init --type basic --project-name temp-project && \
     gradle wrapper --gradle-version ${GRADLE_VERSION} --distribution-type bin && \
     rm -rf build src *.gradle settings.gradle
