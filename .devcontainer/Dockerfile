@@ -9,7 +9,7 @@ ENV PATH=$PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROI
 ENV NODE_ENV=production
 # 安装基础工具和Java 17
 RUN apk update && apk add --no-cache \
-    bash curl unzip git openjdk17 tzdata nodejs=20 npm
+    bash curl unzip git openjdk17 tzdata nodejs npm
 
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
