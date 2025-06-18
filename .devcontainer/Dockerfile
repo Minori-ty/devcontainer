@@ -19,16 +19,13 @@ RUN vfox add nodejs && vfox install nodejs@20.19.2
 # 验证Node.js安装
 RUN vfox list nodejs
 
-RUN vfox use -g nodejs@20.19.2
+# RUN vfox use -g nodejs@20.19.2
 # 升级 npm & 安装 pnpm
-RUN npm install -g npm@latest pnpm
+# RUN npm install -g npm@latest pnpm
 
 # 环境变量
 # ENV GRADLE_VERSION=8.13 \
 #     GRADLE_HOME=/opt/gradle
-
-# 安装依赖
-RUN apk add --no-cache openjdk17 curl unzip bash
 
 # # 安装 Gradle 8.13
 # RUN curl -fsSL https://services.gradle.org/distributions/gradle-8.13-bin.zip -o gradle.zip && \
@@ -58,4 +55,4 @@ RUN yes | sdkmanager --licenses && \
     "build-tools;35.0.0" \
     "ndk;27.1.12297006"
 
-RUN npm i -g eas-cli expo expo-doctor typescript
+# RUN npm i -g eas-cli expo expo-doctor typescript
