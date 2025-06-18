@@ -13,7 +13,12 @@ RUN apk update && apk add --no-cache \
     bash curl unzip git openjdk17 tzdata sudo
 
 RUN curl -sSL https://raw.githubusercontent.com/version-fox/vfox/main/install.sh | bash
+ENV PATH="/root/.vfox/bin:$PATH"
 RUN vfox add nodejs && vfox install nodejs@20.19.2
+
+# 验证Node.js安装
+RUN vfox list nodejs
+
 RUN vfox use -g nodejs@20.19.2
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
