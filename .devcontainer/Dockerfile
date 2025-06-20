@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
@@ -9,7 +9,7 @@ ENV ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.1.12297006
 ENV PATH=$PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_NDK_HOME
 ENV NODE_ENV=production
 # 安装基础工具和Java 17
-RUN apk update && apk add --no-cache \
+RUN apt-get update && apk add --no-cache \
     bash curl unzip git openjdk17 tzdata sudo
 
 RUN curl -sSL https://raw.githubusercontent.com/version-fox/vfox/main/install.sh | bash
