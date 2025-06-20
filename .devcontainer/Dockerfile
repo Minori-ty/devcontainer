@@ -48,10 +48,10 @@ RUN mkdir -p $ANDROID_SDK_ROOT && cd $ANDROID_SDK_ROOT && \
     rm commandlinetools-linux-*.zip
 
 # 安装 SDK components
-RUN yes | sdkmanager --licenses && \
-    sdkmanager "platform-tools" \
-    "platforms;android-35" \
-    "build-tools;35.0.0" \
-    "ndk;27.1.12297006"
+# RUN yes | sdkmanager --licenses && \
+#     sdkmanager "platform-tools" \
+#     "platforms;android-35" \
+#     "build-tools;35.0.0" \
+#     "ndk;27.1.12297006"
 
 # RUN npm i -g eas-cli expo expo-doctor typescript
