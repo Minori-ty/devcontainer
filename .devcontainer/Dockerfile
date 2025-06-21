@@ -12,7 +12,7 @@ ENV NODE_ENV=production
 RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-jdk
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-RUN source ~/.nvm/nvm.sh
+# RUN source ~/.nvm/nvm.sh
 
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
