@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-j
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # RUN source ~/.nvm/nvm.sh
 
+RUN nvm install v20
+RUN nvm use v20
 # 升级 npm & 安装 pnpm
 RUN npm install -g npm@latest pnpm
 
