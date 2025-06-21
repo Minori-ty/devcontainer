@@ -11,10 +11,17 @@ ENV NODE_ENV=production
 # 安装基础工具
 RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-jdk
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-# RUN source ~/.nvm/nvm.sh
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
+    && export NVM_DIR="$HOME/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
+    && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
+    && nvm install v20.0.0 \
+    && nvm use v20.0.0 \
+    && npm install -g npm@latest pnpm eas-cli expo expo-doctor typescript
 
-RUN nvm install v20 && nvm use v20 && npm install -g npm@latest pnpm eas-cli expo expo-doctor typescript
+# 确保 Node 和 npm 在后续命令中可用
+ENV NODE_PATH=$NVM_DIR/versions/node/v20.0.0/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v20.0.0/bin:$PATH
 
 # 环境变量
 # ENV GRADLE_VERSION=8.13 \
