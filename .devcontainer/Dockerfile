@@ -14,10 +14,7 @@ RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-j
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # RUN source ~/.nvm/nvm.sh
 
-RUN nvm install v20
-RUN nvm use v20
-# 升级 npm & 安装 pnpm
-RUN npm install -g npm@latest pnpm
+RUN nvm install v20 && nvm use v20 && npm install -g npm@latest pnpm eas-cli expo expo-doctor typescript
 
 # 环境变量
 # ENV GRADLE_VERSION=8.13 \
@@ -50,5 +47,3 @@ RUN yes | sdkmanager --licenses && \
     "platforms;android-35" \
     "build-tools;35.0.0" \
     "ndk;27.1.12297006"
-
-RUN npm i -g eas-cli expo expo-doctor typescript
