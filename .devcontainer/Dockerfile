@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-j
 
 RUN update-alternatives --list java
 
-ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk-amd64
 RUN [ -d "$JAVA_HOME" ] || JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 ENV PATH $JAVA_HOME/bin:$PATH
 
