@@ -2,7 +2,6 @@ FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=en_US.UTF-8
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 ENV ANDROID_SDK_ROOT=/opt/android-sdk
 ENV ANDROID_HOME=$ANDROID_SDK_ROOT
 ENV ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.1.12297006
@@ -10,6 +9,12 @@ ENV PATH=$PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROI
 ENV NODE_ENV=production
 # 安装基础工具
 RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-jdk
+
+RUN update-alternatives --list java
+
+ENV JAVA_HOME /usr/lib/jvm/java-17-openjdk
+RUN [ -d "$JAVA_HOME" ] || JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
+ENV PATH $JAVA_HOME/bin:$PATH
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
     && export NVM_DIR="$HOME/.nvm" \
