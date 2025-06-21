@@ -15,13 +15,13 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | b
     && export NVM_DIR="$HOME/.nvm" \
     && [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" \
     && [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" \
-    && nvm install v20.0.0 \
-    && nvm use v20.0.0 \
-    && npm install -g npm@latest pnpm eas-cli expo expo-doctor typescript
+    && nvm install v20.17.0 \
+    && nvm use v20.17.0 \
+    && npm install -g pnpm eas-cli expo expo-doctor typescript
 
 # 确保 Node 和 npm 在后续命令中可用
-ENV NODE_PATH=$NVM_DIR/versions/node/v20.0.0/lib/node_modules
-ENV PATH=$NVM_DIR/versions/node/v20.0.0/bin:$PATH
+ENV NODE_PATH=$NVM_DIR/versions/node/v20.17.0/lib/node_modules
+ENV PATH=$NVM_DIR/versions/node/v20.17.0/bin:$PATH
 
 # 环境变量
 # ENV GRADLE_VERSION=8.13 \
