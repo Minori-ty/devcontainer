@@ -8,19 +8,14 @@ ENV ANDROID_HOME=$ANDROID_SDK_ROOT
 ENV ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/27.1.12297006
 ENV PATH=$PATH:$JAVA_HOME/bin:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_NDK_HOME
 ENV NODE_ENV=production
-# 安装基础工具和Java 17
-RUN apt-get update && apt-get install -y curl unzip git tzdata sudo
+# 安装基础工具
+RUN apt-get update && apt-get install -y curl unzip git tzdata sudo openjdk-17-jdk
 
-RUN curl -sSL https://raw.githubusercontent.com/version-fox/vfox/main/install.sh | bash
-ENV PATH="/root/.vfox/bin:$PATH"
-RUN vfox add nodejs && vfox install nodejs@20.19.2
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+RUN source ~/.nvm/nvm.sh
 
-# 验证Node.js安装
-RUN vfox list nodejs
-
-# RUN vfox use -g nodejs@20.19.2
 # 升级 npm & 安装 pnpm
-# RUN npm install -g npm@latest pnpm
+RUN npm install -g npm@latest pnpm
 
 # 环境变量
 # ENV GRADLE_VERSION=8.13 \
@@ -48,10 +43,10 @@ RUN mkdir -p $ANDROID_SDK_ROOT && cd $ANDROID_SDK_ROOT && \
     rm commandlinetools-linux-*.zip
 
 # 安装 SDK components
-# RUN yes | sdkmanager --licenses && \
-#     sdkmanager "platform-tools" \
-#     "platforms;android-35" \
-#     "build-tools;35.0.0" \
-#     "ndk;27.1.12297006"
+RUN yes | sdkmanager --licenses && \
+    sdkmanager "platform-tools" \
+    "platforms;android-35" \
+    "build-tools;35.0.0" \
+    "ndk;27.1.12297006"
 
-# RUN npm i -g eas-cli expo expo-doctor typescript
+RUN npm i -g eas-cli expo expo-doctor typescript
